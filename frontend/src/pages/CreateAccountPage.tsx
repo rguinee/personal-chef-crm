@@ -18,6 +18,7 @@ import { styled } from '@mui/material/styles';
 import Step1PersonalInfo from '../components/account-creation/Step1PersonalInfo';
 import Step2BusinessInfo from '../components/account-creation/Step2BusinessInfo';
 import Step3Specialties from '../components/account-creation/Step3Specialties';
+import BrandWordmark from '../components/BrandWordmark';
 
 const StyledContainer = styled(Container)(({ theme }) => ({
   minHeight: '100vh',
@@ -30,30 +31,6 @@ const StyledContainer = styled(Container)(({ theme }) => ({
   padding: '24px',
 }));
 
-const Wordmark = styled(Box)({
-  display: 'flex',
-  flexDirection: 'column',
-  alignItems: 'center',
-  gap: '8px',
-  textAlign: 'center',
-  marginBottom: '16px',
-});
-
-const BrandTitle = styled(Typography)({
-  fontFamily: "'Goudy Bookletter 1911', serif",
-  fontSize: '48px',
-  lineHeight: '48px',
-  color: '#2f4c38',
-  margin: 0,
-});
-
-const BrandSubtitle = styled(Typography)({
-  fontFamily: "'Plus Jakarta Sans', sans-serif",
-  fontSize: '18px',
-  fontWeight: 'bold',
-  color: '#47624f',
-  margin: 0,
-});
 
 const CreateAccountCard = styled(Card)({
   width: '100%',
@@ -187,14 +164,7 @@ export default function CreateAccountPage() {
 
   return (
     <StyledContainer maxWidth={false}>
-      <Wordmark>
-        <BrandTitle variant="h1" as="h1">
-          Previsto
-        </BrandTitle>
-        <BrandSubtitle variant="h2" as="h2">
-          Personal Chef Ops
-        </BrandSubtitle>
-      </Wordmark>
+      <BrandWordmark titleSize="small" />
 
       <CreateAccountCard>
         <CreateAccountCardContent>

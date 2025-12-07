@@ -11,6 +11,7 @@ import {
   Container,
 } from '@mui/material';
 import { styled } from '@mui/material/styles';
+import BrandWordmark from '../components/BrandWordmark';
 
 const StyledContainer = styled(Container)(({ theme }) => ({
   minHeight: '100vh',
@@ -22,29 +23,6 @@ const StyledContainer = styled(Container)(({ theme }) => ({
   gap: '48px',
 }));
 
-const Wordmark = styled(Box)({
-  display: 'flex',
-  flexDirection: 'column',
-  alignItems: 'center',
-  gap: '16px',
-  textAlign: 'center',
-});
-
-const BrandTitle = styled(Typography)({
-  fontFamily: "'Stoke', serif",
-  fontWeight: "normal",
-  fontSize: '6rem',
-  lineHeight: '100%',
-  letterSpacing: '-0.05em',
-  color: '#2f4c38', // darker-primary
-  margin: 0,
-});
-
-const BrandSubtitle = styled(Typography)({
-  fontFamily: "'Plus Jakarta Sans', sans-serif",
-  fontSize: '2rem',
-  fontWeight: 'normal',
-  color: '#47624f', // primary
   margin: 0,
 });
 
@@ -145,14 +123,7 @@ export default function LoginPage() {
 
   return (
     <StyledContainer maxWidth={false}>
-      <Wordmark>
-        <BrandTitle variant="h1" as="h1">
-          Previsto
-        </BrandTitle>
-        <BrandSubtitle variant="h2" as="h2">
-          Personal Chef Ops
-        </BrandSubtitle>
-      </Wordmark>
+      <BrandWordmark />
 
       <LoginCard>
         <LoginCardContent>
