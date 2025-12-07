@@ -106,3 +106,6 @@ storybook-static/
 
 # TypeScript
 *.tsbuildinfo
+
+# Development journal (keep private)
+JOURNAL.md
