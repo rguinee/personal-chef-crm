@@ -10,6 +10,7 @@ CREATE TABLE users (
     phone VARCHAR(20),
     profile_image_url VARCHAR(500),
     business_name VARCHAR(200),
+    business_address VARCHAR(200),
     bio TEXT,
     specialties JSON, -- Array of specialties like ["Italian", "Vegan", "Gluten-Free"]
     is_active BOOLEAN DEFAULT true,
