@@ -1,6 +1,7 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import {
+  Box,
   Card,
   CardContent,
   Button,
@@ -10,14 +11,16 @@ import {
   Step,
   StepLabel,
   Stack,
+  Alert,
 } from '@mui/material';
 import { styled } from '@mui/material/styles';
-
+import { toast } from 'react-toastify';
 // We'll create these step components after seeing your Figma designs
 import Step1PersonalInfo from '../components/account-creation/Step1PersonalInfo';
 import Step2BusinessInfo from '../components/account-creation/Step2BusinessInfo';
 import Step3Specialties from '../components/account-creation/Step3Specialties';
 import BrandWordmark from '../components/BrandWordmark';
+import { useAuth } from '../contexts/AuthContext';
 
 const StyledContainer = styled(Container)(({ theme }) => ({
   minHeight: '100vh',
@@ -66,7 +69,9 @@ interface UserFormData {
 
 export default function CreateAccountPage() {
   const navigate = useNavigate();
+  const { signUp, loading, user } = useAuth();
   const [activeStep, setActiveStep] = useState(0);
+  const [error, setError] = useState('');
   const [formData, setFormData] = useState<UserFormData>({
     firstName: '',
     lastName: '',
@@ -80,11 +85,36 @@ export default function CreateAccountPage() {
     specialties: [],
   });
 
-  const handleNext = () => {
+  // Redirect if already logged in
+  useEffect(() => {
+    if (user) {
+      navigate('/dashboard'); // We'll create this later
+    }
+  }, [user, navigate]);
+
+  const validateStep = () => {
+    setError('');
+    
+    if (activeStep === 0) {
+      if (!formData.firstName || !formData.email || !formData.password) {
+        setError('Please fill in all required fields');
+        return false;
+      }
+      if (formData.password.length < 6) {
+        setError('Password must be at least 6 characters');
+        return false;
+      }
+    }
+    return true;
+  };
+
+  const handleNext = async () => {
+    if (!validateStep()) return;
+    
     if (activeStep < steps.length - 1) {
       setActiveStep((prevActiveStep) => prevActiveStep + 1);
     } else {
-      handleSubmit();
+      await handleSubmit();
     }
   };
 
@@ -96,21 +126,41 @@ export default function CreateAccountPage() {
     navigate('/');
   };
 
-  const handleDoThisLater = () => {
+  const handleDoThisLater = async () => {
     // Skip remaining steps and create account with current data
-    handleSubmit();
+    await handleSubmit();
   };
 
   const handleSubmit = async () => {
     try {
-      // TODO: Implement account creation API call
-      console.log('Creating account with data:', formData);
+      setError('');
       
-      // For now, navigate back to login
-      // Later, this could navigate to a welcome page or auto-login
-      navigate('/');
-    } catch (error) {
+      if (!formData.firstName || !formData.email || !formData.password) {
+        setError('Please fill in all required fields');
+        return;
+      }
+
+      const { error } = await signUp(formData.email, formData.password, {
+        firstName: formData.firstName,
+        lastName: formData.lastName,
+        phone: formData.phone,
+        businessName: formData.businessName,
+        businessAddress: formData.businessAddress,
+        bio: formData.bio,
+        specialties: formData.specialties,
+      });
+      
+      if (error) {
+        setError(error.message);
+        toast.error('Account creation failed: ' + error.message);
+      } else {
+        toast.success('Account created successfully! Please check your email to verify your account.');
+        navigate('/');
+      }
+    } catch (error: any) {
       console.error('Account creation failed:', error);
+      setError('An unexpected error occurred');
+      toast.error('An unexpected error occurred');
     }
   };
 
@@ -181,6 +231,12 @@ export default function CreateAccountPage() {
             Create Your Account
           </Typography>
 
+          {error && (
+            <Alert severity="error" sx={{ marginBottom: '24px' }}>
+              {error}
+            </Alert>
+          )}
+
           <Stepper activeStep={activeStep} sx={{ marginBottom: '32px' }}>
             {steps.map((label) => (
               <Step key={label}>
@@ -226,6 +282,7 @@ export default function CreateAccountPage() {
               variant="contained"
               onClick={handleNext}
               fullWidth
+              disabled={loading}
               sx={{
                 backgroundColor: '#c96e3d',
                 color: '#f8f9f8',
@@ -243,9 +300,13 @@ export default function CreateAccountPage() {
                   backgroundColor: '#b5613a',
                   boxShadow: 'none',
                 },
+                '&:disabled': {
+                  backgroundColor: '#ccc',
+                },
               }}
             >
-              {activeStep === 0 ? 'Next (1 of 3)' : 
+              {loading && activeStep === steps.length - 1 ? 'Creating Account...' :
+               activeStep === 0 ? 'Next (1 of 3)' : 
                activeStep === 1 ? 'Next (2 of 3)' : 
                'Submit (3 of 3)'}
             </Button>

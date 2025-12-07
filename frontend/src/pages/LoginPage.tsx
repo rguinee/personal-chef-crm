@@ -9,9 +9,12 @@ import {
   Typography,
   Link,
   Container,
+  Alert,
 } from '@mui/material';
 import { styled } from '@mui/material/styles';
+import { toast } from 'react-toastify';
 import BrandWordmark from '../components/BrandWordmark';
+import { useAuth } from '../contexts/AuthContext';
 
 const StyledContainer = styled(Container)(({ theme }) => ({
   minHeight: '100vh',
@@ -100,13 +103,36 @@ const ActionLink = styled(Link)({
 
 export default function LoginPage() {
   const navigate = useNavigate();
-  const [username, setUsername] = useState('');
+  const { signIn, loading, user } = useAuth();
+  const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [error, setError] = useState('');
 
-  const handleSubmit = (event: React.FormEvent) => {
+  // Redirect if already logged in
+  React.useEffect(() => {
+    if (user) {
+      navigate('/dashboard'); // We'll create this later
+    }
+  }, [user, navigate]);
+
+  const handleSubmit = async (event: React.FormEvent) => {
     event.preventDefault();
-    // TODO: Implement login logic
-    console.log('Login attempt:', { username, password });
+    setError('');
+    
+    if (!email || !password) {
+      setError('Please fill in all fields');
+      return;
+    }
+
+    const { error } = await signIn(email, password);
+    
+    if (error) {
+      setError(error.message);
+      toast.error('Login failed: ' + error.message);
+    } else {
+      toast.success('Welcome back!');
+      navigate('/dashboard');
+    }
   };
 
   const handleCreateAccount = () => {
@@ -115,7 +141,7 @@ export default function LoginPage() {
 
   const handleForgotPassword = () => {
     // TODO: Navigate to forgot password page
-    console.log('Navigate to forgot password');
+    toast.info('Forgot password feature coming soon!');
   };
 
   return (
@@ -124,14 +150,22 @@ export default function LoginPage() {
 
       <LoginCard>
         <LoginCardContent>
+          {error && (
+            <Alert severity="error" sx={{ marginBottom: '16px' }}>
+              {error}
+            </Alert>
+          )}
+          
           <Box component="form" onSubmit={handleSubmit} sx={{ display: 'flex', flexDirection: 'column', gap: '24px' }}>
             <StyledTextField
-              label="Username"
+              label="Email"
+              type="email"
               variant="outlined"
               fullWidth
-              value={username}
-              onChange={(e) => setUsername(e.target.value)}
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
               required
+              disabled={loading}
             />
             
             <StyledTextField
@@ -142,10 +176,15 @@ export default function LoginPage() {
               value={password}
               onChange={(e) => setPassword(e.target.value)}
               required
+              disabled={loading}
             />
             
-            <LoginButton type="submit" fullWidth>
-              Log in
+            <LoginButton 
+              type="submit" 
+              fullWidth
+              disabled={loading}
+            >
+              {loading ? 'Signing in...' : 'Log in'}
             </LoginButton>
           </Box>
 
