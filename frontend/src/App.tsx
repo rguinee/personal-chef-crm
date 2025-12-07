@@ -4,6 +4,7 @@ import { ThemeProvider, createTheme } from '@mui/material/styles';
 import CssBaseline from '@mui/material/CssBaseline';
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import LoginPage from './pages/LoginPage';
 
 // Import pages (to be created)
 // import Dashboard from '@/pages/Dashboard';
@@ -14,11 +15,21 @@ import 'react-toastify/dist/ReactToastify.css';
 const theme = createTheme({
   palette: {
     primary: {
-      main: '#2E7D32', // Green for food/nature theme
+      main: '#47624f', // Primary green from Figma
     },
     secondary: {
-      main: '#FF6F00', // Orange accent
+      main: '#c96e3d', // Orange accent from Figma
     },
+    background: {
+      default: '#ffffff',
+      paper: '#f8f9f8',
+    },
+    text: {
+      primary: '#3c3f3a',
+    },
+  },
+  typography: {
+    fontFamily: "'Plus Jakarta Sans', sans-serif",
   },
 });
 
@@ -29,26 +40,7 @@ function App() {
       <Router>
         <div className="App">
           <Routes>
-            <Route path="/" element={
-              <div style={{ 
-                padding: '20px', 
-                textAlign: 'center',
-                fontFamily: 'Arial, sans-serif'
-              }}>
-                <h1>🍽️ Personal Chef CRM</h1>
-                <p>Welcome to your CRM, Recipe Manager, and Meal Planner!</p>
-                <div style={{ marginTop: '20px' }}>
-                  <h2>Coming Soon:</h2>
-                  <ul style={{ textAlign: 'left', maxWidth: '400px', margin: '0 auto' }}>
-                    <li>📊 Client Management Dashboard</li>
-                    <li>📋 Recipe Library</li>
-                    <li>🗓️ Meal Planning Tools</li>
-                    <li>💰 Pricing & Billing</li>
-                    <li>📈 Analytics & Reports</li>
-                  </ul>
-                </div>
-              </div>
-            } />
+            <Route path="/" element={<LoginPage />} />
             {/* Future routes will be added here */}
           </Routes>
         </div>
