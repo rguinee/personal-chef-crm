@@ -80,14 +80,6 @@ export default function Step2BusinessInfo({ data, updateData }: Step2BusinessInf
       />
       
       <StyledTextField
-        label="Last name"
-        variant="outlined"
-        fullWidth
-        value={data.lastName || ''}
-        onChange={handleChange('lastName')}
-      />
-      
-      <StyledTextField
         label="Phone"
         variant="outlined"
         fullWidth

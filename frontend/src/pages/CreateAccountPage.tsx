@@ -10,6 +10,7 @@ import {
   Stepper,
   Step,
   StepLabel,
+  Stack,
 } from '@mui/material';
 import { styled } from '@mui/material/styles';
 
@@ -115,8 +116,13 @@ export default function CreateAccountPage() {
     setActiveStep((prevActiveStep) => prevActiveStep - 1);
   };
 
-  const handleBackToLogin = () => {
+  const handleCancel = () => {
     navigate('/');
+  };
+
+  const handleDoThisLater = () => {
+    // Skip remaining steps and create account with current data
+    handleSubmit();
   };
 
   const handleSubmit = async () => {
@@ -216,38 +222,41 @@ export default function CreateAccountPage() {
 
           {renderStepContent()}
 
-          <Box sx={{ display: 'flex', justifyContent: 'space-between', marginTop: '32px' }}>
-            {activeStep === 0 ? (
+          {/* Button Stack with Back and Next/Submit */}
+          <Stack
+            direction="row"
+            spacing={2}
+            mb={3}
+            sx={{ marginTop: '32px', width: '100%' }}
+          >
               <Button
-                variant="text"
-                onClick={handleBackToLogin}
+                variant="outlined"
+                onClick={activeStep === 0 ? handleCancel : handleBack}
                 sx={{
-                  fontFamily: "'Plus Jakarta Sans', sans-serif",
-                  textTransform: 'uppercase',
-                  letterSpacing: '0.46px',
-                  color: '#3c3f3a',
-                }}
-              >
-                Back to Login
-              </Button>
-            ) : (
-              <Button
-                variant="text"
-                onClick={handleBack}
-                sx={{
-                  fontFamily: "'Plus Jakarta Sans', sans-serif",
-                  textTransform: 'uppercase',
-                  letterSpacing: '0.46px',
-                  color: '#3c3f3a',
-                }}
+                color: '#3c3f3a',
+                borderColor: '#a4a9a3',
+                backgroundColor: 'transparent',
+                fontFamily: "'Plus Jakarta Sans', sans-serif",
+                fontSize: '15px',
+                fontWeight: 'bold',
+                textTransform: 'uppercase',
+                letterSpacing: '0.46px',
+                padding: '16px 24px',
+                borderRadius: '4px',
+                height: '58px',
+                '&:hover': {
+                  backgroundColor: '#f8f9f8',
+                  borderColor: '#47624f',
+                },
+              }}
               >
                 Back
               </Button>
-            )}
-
+            
             <Button
               variant="contained"
               onClick={handleNext}
+              fullWidth
               sx={{
                 backgroundColor: '#c96e3d',
                 color: '#f8f9f8',
@@ -256,16 +265,47 @@ export default function CreateAccountPage() {
                 fontWeight: 'bold',
                 textTransform: 'uppercase',
                 letterSpacing: '0.46px',
-                padding: '12px 24px',
+                padding: '16px 24px',
                 borderRadius: '4px',
+                height: '58px',
+                flex: 1,
+                boxShadow: 'none',
                 '&:hover': {
                   backgroundColor: '#b5613a',
                 },
               }}
             >
-              {activeStep === steps.length - 1 ? 'Create Account' : 'Next'}
+              {activeStep === 0 ? 'Next (1 of 3)' : 
+               activeStep === 1 ? 'Next (2 of 3)' : 
+               'Submit (3 of 3)'}
             </Button>
-          </Box>
+          </Stack>
+
+          {/* Text Links Below Button */}  
+          {activeStep > 0 && (
+              <Typography
+                component="button"
+                onClick={handleDoThisLater}
+                sx={{
+                  background: 'none',
+                  border: 'none',
+                  cursor: 'pointer',
+                  fontFamily: "'Plus Jakarta Sans', sans-serif",
+                  fontSize: '15px',
+                  color: '#3c3f3a',
+                  textTransform: 'uppercase',
+                  letterSpacing: '0.46px',
+                  textDecoration: 'underline',
+                  '&:hover': {
+                    color: '#47624f',
+                  },
+                  float: 'right',
+                  mb: 3,
+                }}
+              >
+                Do this later
+              </Typography>
+            )}
         </CreateAccountCardContent>
       </CreateAccountCard>
     </StyledContainer>
