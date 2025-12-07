@@ -1,4 +1,3 @@
-import React from 'react';
 import { Box, Typography } from '@mui/material';
 import { styled } from '@mui/material/styles';
 
@@ -11,9 +10,11 @@ const Wordmark = styled(Box)({
 });
 
 const BrandTitle = styled(Typography)({
-  fontFamily: "'Goudy Bookletter 1911', serif",
+  fontFamily: "'Young Serif', serif",
   fontSize: '96px',
+  fontWeight: 'normal',
   lineHeight: '64px',
+  letterSpacing: '-0.05em',
   color: '#2f4c38', // darker-primary
   margin: 0,
 });
@@ -37,8 +38,7 @@ export default function BrandWordmark({ titleSize = 'large', className }: BrandW
   return (
     <Wordmark className={className}>
       <BrandTitle 
-        variant="h1" 
-        component="h1"
+        as="h1"
         sx={{
           fontSize: isSmall ? '48px' : '96px',
           lineHeight: isSmall ? '48px' : '64px',
@@ -47,8 +47,7 @@ export default function BrandWordmark({ titleSize = 'large', className }: BrandW
         Previsto
       </BrandTitle>
       <BrandSubtitle 
-        variant="h2" 
-        component="h2"
+        as="h2"
         sx={{
           fontSize: isSmall ? '18px' : '32px',
         }}

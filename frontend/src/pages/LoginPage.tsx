@@ -23,9 +23,6 @@ const StyledContainer = styled(Container)(({ theme }) => ({
   gap: '48px',
 }));
 
-  margin: 0,
-});
-
 const LoginCard = styled(Card)({
   width: '500px',
   border: '1px solid #a4a9a3',
