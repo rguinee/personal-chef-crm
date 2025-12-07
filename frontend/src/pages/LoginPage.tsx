@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import {
   Box,
   Card,
@@ -123,6 +124,7 @@ const ActionLink = styled(Link)({
 });
 
 export default function LoginPage() {
+  const navigate = useNavigate();
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
 
@@ -133,8 +135,7 @@ export default function LoginPage() {
   };
 
   const handleCreateAccount = () => {
-    // TODO: Navigate to registration page
-    console.log('Navigate to create account');
+    navigate('/create-account');
   };
 
   const handleForgotPassword = () => {

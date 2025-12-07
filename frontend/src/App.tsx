@@ -5,6 +5,7 @@ import CssBaseline from '@mui/material/CssBaseline';
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import LoginPage from './pages/LoginPage';
+import CreateAccountPage from './pages/CreateAccountPage';
 
 // Import pages (to be created)
 // import Dashboard from '@/pages/Dashboard';
@@ -41,6 +42,7 @@ function App() {
         <div className="App">
           <Routes>
             <Route path="/" element={<LoginPage />} />
+            <Route path="/create-account" element={<CreateAccountPage />} />
             {/* Future routes will be added here */}
           </Routes>
         </div>
